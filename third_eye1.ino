@@ -52,7 +52,6 @@ void loop()
   delay(d);
 }
   Serial.print(cm);
-  Serial.print(cm);
   Serial.println();
   delay(40);
 }
