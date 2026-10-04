@@ -132,6 +132,16 @@ beep gap thresholds.
 pip install -r requirements.txt
 python serial_logger.py --port COM3 --duration 60
 
+## Project history
+
+**Grade 9 (original):** Firmware (`third_eye1.ino`), circuit, and
+physical prototype. Built with a team of 5; I wrote the firmware and
+coordinated the hardware build.
+
+**2026 (added later):**  I added `serial_logger.py` to record sensor
+readings over serial for calibration, cleaned up the firmware (named
+constants, sensor timeout, audible low-battery alert), and documented
+the project properly in this README.
 
 ## What I'd improve
 
