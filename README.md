@@ -27,72 +27,58 @@ wiring.
 
 ```mermaid
 flowchart LR
-    %% ---------- Styling ----------
-    classDef hardware fill:#eef4f0,stroke:#2f6f4e,stroke-width:1.5px,color:#18181b
+    classDef input    fill:#eef4f0,stroke:#2f6f4e,stroke-width:1.5px,color:#18181b
     classDef firmware fill:#eff4fb,stroke:#1d4ed8,stroke-width:1.5px,color:#18181b
     classDef decision fill:#fdf6e3,stroke:#a16207,stroke-width:1.5px,color:#18181b
-    classDef feedback fill:#f4effb,stroke:#7c3aed,stroke-width:1.5px,color:#18181b
+    classDef output   fill:#f4effb,stroke:#7c3aed,stroke-width:1.5px,color:#18181b
 
-    %% ---------- Layer 1: Hardware ----------
-    subgraph L1["1 · Hardware"]
+    subgraph IN["1 · Inputs"]
         direction TB
-        HW1["HC-SR04 Ultrasonic<br/><i>Trig: A4 · Echo: A5</i>"]
-        HW2["Arduino Uno"]
-        HW3["Piezo Buzzer<br/><i>Pin 9</i>"]
-        HW4["LED<br/><i>Pin 13</i>"]
-        HW5["6V Battery Pack<br/><i>voltage divider → A0</i>"]
+        S["HC-SR04 Sensor<br/><i>Trig: A4 · Echo: A5</i>"]
+        B["6V Battery<br/><i>voltage divider → A0</i>"]
     end
 
-    %% ---------- Layer 2: Firmware ----------
-    subgraph L2["2 · Firmware — third_eye1.ino"]
+    subgraph FW["2 · Firmware — third_eye1.ino"]
         direction TB
-        F1["setup()<br/>configure pins"]
-        F2["loop() · step 1<br/>read battery voltage"]
-        F3["loop() · step 2<br/>trigger ultrasonic pulse"]
-        F4["pulseIn()<br/>measure echo duration"]
-        F5["microsecondsToCentimeters()<br/>duration ÷ 29 ÷ 2"]
+        F1["setup()<br/><i>configure pins</i>"]
+        F2["Read battery voltage"]
+        F3["Trigger pulse,<br/>measure echo duration"]
+        F4["Convert to cm<br/><i>duration ÷ 29 ÷ 2</i>"]
     end
 
-    %% ---------- Layer 3: Decisions ----------
-    subgraph L3["3 · Decision Logic"]
+    subgraph DEC["3 · Decision Logic"]
         direction TB
         D1{"Battery<br/>≤ 5.5 V ?"}
         D2{"Distance<br/>≤ 100 cm ?"}
         D3["Map distance → beep gap<br/><i>1 cm → 10 ms</i><br/><i>100 cm → 1000 ms</i>"]
     end
 
-    %% ---------- Layer 4: Feedback ----------
-    subgraph L4["4 · User Feedback"]
+    subgraph OUT["4 · User Feedback"]
         direction TB
-        O1["Beep frequency<br/>scales with proximity"]
-        O2["LED flash<br/>synchronised with beep"]
-        O3["Triple-beep<br/>low-battery alert"]
-        O4["Serial monitor<br/>distance + warnings"]
+        O1["Buzzer<br/><i>frequency scales with proximity</i>"]
+        O2["LED<br/><i>flashes in sync</i>"]
+        O3["Low-battery alert<br/><i>triple beep</i>"]
+        O4["Serial monitor<br/><i>distance + warnings</i>"]
     end
 
-    %% ---------- Edges ----------
-    HW5 --> F2
+    B --> F2
     F2 --> D1
-    D1 -->|Yes| O3
-    D1 -->|No| F3
+    D1 -->|yes| O3
+    D1 -->|no| F3
     F1 --> F3
-    F3 --> HW1
-    HW1 --> F4
-    F4 --> F5
-    F5 --> D2
-    D2 -->|No| F2
-    D2 -->|Yes| D3
-    D3 --> HW3
-    D3 --> HW4
-    HW3 --> O1
-    HW4 --> O2
+    S --> F3
+    F3 --> F4
+    F4 --> D2
+    D2 -->|no| F2
+    D2 -->|yes| D3
+    D3 --> O1
+    D3 --> O2
     F4 -.-> O4
 
-    %% ---------- Apply classes ----------
-    class HW1,HW2,HW3,HW4,HW5 hardware
-    class F1,F2,F3,F4,F5 firmware
+    class S,B input
+    class F1,F2,F3,F4 firmware
     class D1,D2,D3 decision
-    class O1,O2,O3,O4 feedback
+    class O1,O2,O3,O4 output
 ```
 
 ## How it works
