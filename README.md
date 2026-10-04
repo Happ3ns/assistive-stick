@@ -174,7 +174,17 @@ us a couple of iterations to get the timing right.
 Also learned that working in a team of five on hardware is harder than
 working alone on software. You can't just merge branches — you have to
 physically pass the prototype around and coordinate who has it when.
+## Future work
 
+- **Backend with Firebase Auth + Firestore.** Currently progress is
+  stored in browser localStorage, so it doesn't sync across devices.
+  Firebase would handle auth and storage without a custom server.
+- **Spaced repetition.** Instead of just flagging weak topics, schedule
+  reviews of missed questions at increasing intervals.
+- **Question bank expansion.** The bank is currently Physics, Chemistry,
+  and Maths. Adding more questions per topic would improve coverage.
+- **Import/export.** Let users back up their progress to a file, since
+  clearing browser data currently wipes everything. 
 ## Files
 
 - `third_eye1.ino` — Arduino firmware
