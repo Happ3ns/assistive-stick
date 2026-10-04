@@ -122,14 +122,16 @@ A few things I'd clean up now that I've looked at it again:
 - The battery warning only prints to serial, doesn't beep
 - All the tuning constants are hardcoded instead of being named variables
 
-## Note on the prototype
+## Tooling
 
-The physical prototype was built and demonstrated at the school science fair
-in Grade 9. It's stored at the school, which I no longer attend. The image
-above is a TinkerCAD wiring simulation of the same circuit.
+`serial_logger.py` — records the Arduino's serial output to a CSV file
+for offline analysis. Useful for testing sensor range and calibrating the
+beep gap thresholds.
 
-If I were building it again today, I'd want a real photo in this README.
-Lesson learned: document the physical build while you still have it.
+```bash
+pip install -r requirements.txt
+python serial_logger.py --port COM3 --duration 60
+
 
 ## What I'd improve
 
