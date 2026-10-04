@@ -178,15 +178,14 @@ physically pass the prototype around and coordinate who has it when.
 
 ## Future work
 
-- **Backend with Firebase Auth + Firestore.** Currently progress is
-  stored in browser localStorage, so it doesn't sync across devices.
-  Firebase would handle auth and storage without a custom server.
-- **Spaced repetition.** Instead of just flagging weak topics, schedule
-  reviews of missed questions at increasing intervals.
-- **Question bank expansion.** The bank is currently Physics, Chemistry,
-  and Maths. Adding more questions per topic would improve coverage.
-- **Import/export.** Let users back up their progress to a file, since
-  clearing browser data currently wipes everything.
+- **Replace the buzzer with a vibration motor.** Beeping in public draws
+  unwanted attention to the user. Vibration is silent and more discreet.
+- **Add a side-facing sensor.** The current sensor only detects obstacles
+  directly ahead — shoulder-height and side obstacles are missed.
+- **Better battery monitoring.** The analog voltage divider works, but a
+  proper fuel gauge IC would give accurate readings.
+- **Enclose the electronics.** Currently everything is exposed on a
+  breadboard. A 3D-printed case would make it usable outdoors.
   
 ## Files
 
