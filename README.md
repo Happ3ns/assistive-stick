@@ -83,22 +83,26 @@ flowchart LR
 
 ## How it works
 
-The HC-SR04 ultrasonic sensor works by sending out a sound pulse and timing
-how long it takes to bounce back. That gives us a distance reading.
+The HC-SR04 ultrasonic sensor measures distance by timing how long a sound
+pulse takes to bounce back. The firmware:
 
-The firmware logic:
+1. Reads distance from the sensor
+2. If something is within 100 cm, beeps and flashes the LED
+3. The beep gap scales with distance — 10 ms when close, 1000 ms when far
+4. Reads battery voltage from analog pin A0 and prints a warning to the
+   serial monitor if it drops below 5.5V
 
-1. Read distance from the sensor
-2. If something is within 100 cm, start beeping
-3. The beep gap scales with distance — 10 ms at 1 cm away, 1000 ms at 100 cm
-4. Also light up an LED at the same time (visual feedback for people with
-   partial vision)
-5. Read battery voltage from an analog pin and warn if it drops below 5.5V
+The distance-scaled beep is the important part. A constant beep when
+something is close is annoying — the user would turn it off. A beep that
+gets faster as they approach an obstacle gives continuous proximity feedback.
 
-The scaling part is what makes it useful. A constant beep when something
-is close would just be annoying — the user would probably turn it off. But
-a beep that gets faster as they approach an obstacle gives them a continuous
-sense of how close they are. Like the parking sensor on a car.
+## Known issues in the current firmware
+
+- The battery warning only prints to serial — it doesn't beep. A real user
+  wouldn't see it.
+- The ultrasonic reading isn't wrapped in a timeout, so a broken sensor
+  can stall the loop.
+- Tuning constants (100 cm, 5.5V, beep timing) are hardcoded.
 
 ## Components
 
