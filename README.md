@@ -26,53 +26,73 @@ wiring.
 ## Architecture
 
 ```mermaid
-flowchart TD
-    subgraph HW["Hardware"]
-        H1[HC-SR04 Ultrasonic Sensor<br/>Trig: A4, Echo: A5]
-        H2[Arduino Uno]
-        H3[Piezo Buzzer<br/>Pin 9]
-        H4[LED<br/>Pin 13]
-        H5[6V Battery Pack<br/>via voltage divider to A0]
+flowchart LR
+    %% ---------- Styling ----------
+    classDef hardware fill:#eef4f0,stroke:#2f6f4e,stroke-width:1.5px,color:#18181b
+    classDef firmware fill:#eff4fb,stroke:#1d4ed8,stroke-width:1.5px,color:#18181b
+    classDef decision fill:#fdf6e3,stroke:#a16207,stroke-width:1.5px,color:#18181b
+    classDef feedback fill:#f4effb,stroke:#7c3aed,stroke-width:1.5px,color:#18181b
+
+    %% ---------- Layer 1: Hardware ----------
+    subgraph L1["1 · Hardware"]
+        direction TB
+        HW1["HC-SR04 Ultrasonic<br/><i>Trig: A4 · Echo: A5</i>"]
+        HW2["Arduino Uno"]
+        HW3["Piezo Buzzer<br/><i>Pin 9</i>"]
+        HW4["LED<br/><i>Pin 13</i>"]
+        HW5["6V Battery Pack<br/><i>voltage divider → A0</i>"]
     end
 
-    subgraph FW["Firmware — third_eye1.ino"]
-        F1[setup<br/>configure pins]
-        F2[loop — read battery voltage]
-        F3[loop — trigger ultrasonic pulse]
-        F4[pulseIn measures echo duration]
-        F5[microsecondsToCentimeters<br/>duration / 29 / 2]
-        F6{Distance ≤ 100 cm?}
-        F7[Map distance → beep gap<br/>1cm → 10ms, 100cm → 1000ms]
-        F8[Beep + LED on, then delay beepGap]
-        F9[Battery ≤ 5.5V?]
-        F10[Triple-beep low battery warning]
+    %% ---------- Layer 2: Firmware ----------
+    subgraph L2["2 · Firmware — third_eye1.ino"]
+        direction TB
+        F1["setup()<br/>configure pins"]
+        F2["loop() · step 1<br/>read battery voltage"]
+        F3["loop() · step 2<br/>trigger ultrasonic pulse"]
+        F4["pulseIn()<br/>measure echo duration"]
+        F5["microsecondsToCentimeters()<br/>duration ÷ 29 ÷ 2"]
     end
 
-    subgraph OUT["User Feedback"]
-        O1[Faster beeps = closer obstacle]
-        O2[LED flashes in sync]
-        O3[Audible low-battery alert]
-        O4[Serial monitor: distance, warnings]
+    %% ---------- Layer 3: Decisions ----------
+    subgraph L3["3 · Decision Logic"]
+        direction TB
+        D1{"Battery<br/>≤ 5.5 V ?"}
+        D2{"Distance<br/>≤ 100 cm ?"}
+        D3["Map distance → beep gap<br/><i>1 cm → 10 ms</i><br/><i>100 cm → 1000 ms</i>"]
     end
 
-    H5 --> F2
-    F2 --> F9
-    F9 -->|Yes| F10
-    F10 --> O3
-    F9 -->|No| F3
-    H2 --> F1
+    %% ---------- Layer 4: Feedback ----------
+    subgraph L4["4 · User Feedback"]
+        direction TB
+        O1["Beep frequency<br/>scales with proximity"]
+        O2["LED flash<br/>synchronised with beep"]
+        O3["Triple-beep<br/>low-battery alert"]
+        O4["Serial monitor<br/>distance + warnings"]
+    end
+
+    %% ---------- Edges ----------
+    HW5 --> F2
+    F2 --> D1
+    D1 -->|Yes| O3
+    D1 -->|No| F3
     F1 --> F3
-    F3 --> H1
-    H1 --> F4
+    F3 --> HW1
+    HW1 --> F4
     F4 --> F5
-    F5 --> F6
-    F6 -->|Yes| F7
-    F6 -->|No| F2
-    F7 --> F8
-    F8 --> H3 & H4
-    H3 --> O1
-    H4 --> O2
-    F4 --> O4
+    F5 --> D2
+    D2 -->|No| F2
+    D2 -->|Yes| D3
+    D3 --> HW3
+    D3 --> HW4
+    HW3 --> O1
+    HW4 --> O2
+    F4 -.-> O4
+
+    %% ---------- Apply classes ----------
+    class HW1,HW2,HW3,HW4,HW5 hardware
+    class F1,F2,F3,F4,F5 firmware
+    class D1,D2,D3 decision
+    class O1,O2,O3,O4 feedback
 ```
 
 ## How it works
