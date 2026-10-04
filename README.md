@@ -135,6 +135,7 @@ beep gap thresholds.
 ```bash
 pip install -r requirements.txt
 python serial_logger.py --port COM3 --duration 60
+```
 
 ## Project history
 
@@ -142,7 +143,7 @@ python serial_logger.py --port COM3 --duration 60
 physical prototype. Built with a team of 5; I wrote the firmware and
 coordinated the hardware build.
 
-**2026 (added later):**  I added `serial_logger.py` to record sensor
+**2026 (added later):** I added `serial_logger.py` to record sensor
 readings over serial for calibration, cleaned up the firmware (named
 constants, sensor timeout, audible low-battery alert), and documented
 the project properly in this README.
@@ -174,6 +175,7 @@ us a couple of iterations to get the timing right.
 Also learned that working in a team of five on hardware is harder than
 working alone on software. You can't just merge branches — you have to
 physically pass the prototype around and coordinate who has it when.
+
 ## Future work
 
 - **Backend with Firebase Auth + Firestore.** Currently progress is
@@ -184,7 +186,8 @@ physically pass the prototype around and coordinate who has it when.
 - **Question bank expansion.** The bank is currently Physics, Chemistry,
   and Maths. Adding more questions per topic would improve coverage.
 - **Import/export.** Let users back up their progress to a file, since
-  clearing browser data currently wipes everything. 
+  clearing browser data currently wipes everything.
+  
 ## Files
 
 - `third_eye1.ino` — Arduino firmware
