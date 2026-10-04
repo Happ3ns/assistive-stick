@@ -23,6 +23,58 @@ pack, cable management), one person on documentation and presentation,
 one person on the poster and demo setup, and me on firmware and electronics
 wiring.
 
+## Architecture
+
+```mermaid
+flowchart TD
+    subgraph HW["Hardware"]
+        H1[HC-SR04 Ultrasonic Sensor<br/>Trig: A4, Echo: A5]
+        H2[Arduino Uno]
+        H3[Piezo Buzzer<br/>Pin 9]
+        H4[LED<br/>Pin 13]
+        H5[6V Battery Pack<br/>via voltage divider to A0]
+    end
+
+    subgraph FW["Firmware — third_eye1.ino"]
+        F1[setup<br/>configure pins]
+        F2[loop — read battery voltage]
+        F3[loop — trigger ultrasonic pulse]
+        F4[pulseIn measures echo duration]
+        F5[microsecondsToCentimeters<br/>duration / 29 / 2]
+        F6{Distance ≤ 100 cm?}
+        F7[Map distance → beep gap<br/>1cm → 10ms, 100cm → 1000ms]
+        F8[Beep + LED on, then delay beepGap]
+        F9[Battery ≤ 5.5V?]
+        F10[Triple-beep low battery warning]
+    end
+
+    subgraph OUT["User Feedback"]
+        O1[Faster beeps = closer obstacle]
+        O2[LED flashes in sync]
+        O3[Audible low-battery alert]
+        O4[Serial monitor: distance, warnings]
+    end
+
+    H5 --> F2
+    F2 --> F9
+    F9 -->|Yes| F10
+    F10 --> O3
+    F9 -->|No| F3
+    H2 --> F1
+    F1 --> F3
+    F3 --> H1
+    H1 --> F4
+    F4 --> F5
+    F5 --> F6
+    F6 -->|Yes| F7
+    F6 -->|No| F2
+    F7 --> F8
+    F8 --> H3 & H4
+    H3 --> O1
+    H4 --> O2
+    F4 --> O4
+```
+
 ## How it works
 
 The HC-SR04 ultrasonic sensor works by sending out a sound pulse and timing
