@@ -150,16 +150,14 @@ the project properly in this README.
 
 ## What I'd improve
 
-- **Replace the buzzer with a vibration motor.** Beeping in public is
-  annoying and draws unwanted attention to the user. Vibration is silent
-  and more discreet.
-- **Add a side-facing sensor.** Right now it only detects obstacles straight
-  ahead, which means the user can still bump into things at shoulder height
-  or to the side.
-- **Better battery monitoring.** The analog voltage divider works but it's
-  imprecise. A proper fuel gauge IC would give accurate readings.
-- **Enclose the electronics.** Right now everything is exposed on a breadboard.
-  A 3D-printed case would make it actually usable outdoors.
+- **Replace the buzzer with a vibration motor.** Beeping in public draws
+  unwanted attention to the user. Vibration is silent and more discreet.
+- **Add a side-facing sensor.** The current sensor only detects obstacles
+  directly ahead — shoulder-height and side obstacles are missed.
+- **Better battery monitoring.** The analog voltage divider works, but a
+  proper fuel gauge IC would give accurate readings.
+- **Enclose the electronics.** Currently everything is exposed on a
+  breadboard. A 3D-printed case would make it usable outdoors.
 
 ## What I learned
 
@@ -176,20 +174,10 @@ Also learned that working in a team of five on hardware is harder than
 working alone on software. You can't just merge branches — you have to
 physically pass the prototype around and coordinate who has it when.
 
-## Future work
-
-- **Replace the buzzer with a vibration motor.** Beeping in public draws
-  unwanted attention to the user. Vibration is silent and more discreet.
-- **Add a side-facing sensor.** The current sensor only detects obstacles
-  directly ahead — shoulder-height and side obstacles are missed.
-- **Better battery monitoring.** The analog voltage divider works, but a
-  proper fuel gauge IC would give accurate readings.
-- **Enclose the electronics.** Currently everything is exposed on a
-  breadboard. A 3D-printed case would make it usable outdoors.
-  
 ## Files
 
 - `third_eye1.ino` — Arduino firmware
+- `serial_logger.py` — Python serial telemetry and CSV logging script
 - `wiring-diagram.png` — TinkerCAD circuit diagram
 
 ## Running it
